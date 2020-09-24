@@ -71,11 +71,16 @@ export function transform(
 	const fm_opts = frontmatter
 		? frontmatter
 		: { parse: default_frontmatter, type: 'yaml', marker: '-' };
-	const toMDAST = unified()
+
+	let toMDAST = unified()
 		.use(markdown)
 		.use(mdsvex_parser)
 		.use(external, { target: false, rel: ['nofollow'] })
-		.use(escape_code, { blocks: !!highlight })
+		.use(escape_code, { blocks: !!highlight });
+
+	remarkPlugins.forEach((plugin) => (toMDAST = toMDAST.use(plugin as any)));
+
+	toMDAST = toMDAST
 		.use(extract_frontmatter, [{ type: fm_opts.type, marker: fm_opts.marker }])
 		.use(parse_frontmatter, { parse: fm_opts.parse, type: fm_opts.type })
 		.use(highlight_blocks, highlight || {});
@@ -86,8 +91,6 @@ export function transform(
 			typeof smartypants === 'boolean' ? {} : smartypants
 		);
 	}
-
-	apply_plugins(remarkPlugins, toMDAST);
 
 	const toHAST = toMDAST
 		.use(remark2rehype, {

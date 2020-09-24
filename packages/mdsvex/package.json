@@ -1,5 +1,5 @@
 {
-	"name": "mdsvex",
+	"name": "@dylanvann/mdsvex",
 	"version": "0.8.8",
 	"description": "Markdown preprocessor for Svelte",
 	"main": "dist/main.cjs.js",
