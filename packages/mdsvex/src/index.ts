@@ -78,7 +78,7 @@ export function transform(
 		.use(external, { target: false, rel: ['nofollow'] })
 		.use(escape_code, { blocks: !!highlight });
 
-	remarkPlugins.forEach((plugin) => (toMDAST = toMDAST.use(plugin as any)));
+	toMDAST = apply_plugins(remarkPlugins, toMDAST);
 
 	toMDAST = toMDAST
 		.use(extract_frontmatter, [{ type: fm_opts.type, marker: fm_opts.marker }])
